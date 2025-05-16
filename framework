@@ -1,0 +1,239 @@
+🧾 Python Automation Framework
+Standards & Conventions Document
+📁 1. Folder Structure Standard
+Folder Name	Purpose
+tests/	All test cases (UI + API)
+pages/	Page Object Model files (for Selenium)
+socket_api/	Socket API clients, message handlers, encryption utilities
+utils/	Common helper modules (logging, config readers, file utils)
+config/	YAML or .env configuration files (env URLs, credentials)
+reports/	Test execution reports (HTML, logs, screenshots)
+drivers/	Browser driver executables (e.g., chromedriver)
+.github/ or ci/	(Optional) CI/CD workflows
+________________________________________
+📄 2. File Naming Conventions
+File Type	Convention	Example
+Test files	test_*.py	test_login.py
+Page objects	*_page.py	login_page.py
+API clients	*_client.py	order_client.py
+Utility modules	snake_case.py	logger.py, data_loader.py
+Config files	.env, config.yaml	config.yaml
+Reports/logs	auto-generated or timestamped	report_2025_05_13.html
+________________________________________
+🔤 3. Naming Conventions
+3.1 Method Names
+Purpose	Convention	Example
+Test method	test_<what_is_tested>	test_valid_login()
+Setup/teardown	setup_method, teardown_method	setup_method(self)
+Helper methods	Verb-noun or action based	load_config(), click_login()
+3.2 Class Names
+Type	Convention	Example
+Page objects	PascalCasePage	LoginPage
+API clients	PascalCaseClient	OrderClient
+Test classes	Test<Feature>	TestLogin, TestOrderFlow
+________________________________________
+✅ 4. Test Structure Guidelines
+•	All test methods must start with test_.
+•	Use pytest.mark.<tag> for category (e.g., ui, api, smoke, regression).
+•	Keep assertions minimal per test (prefer 1–2 assertions max).
+•	Use fixtures in conftest.py for browser, environment, or session setup.
+________________________________________
+🗂 5. Reporting Structure
+Report Type	Standard Format	Location
+HTML report	pytest-html, saved as .html	reports/report.html
+Screenshots	on_fail_<test_name>.png	reports/screenshots/
+Logs	Timestamped .log files	reports/logs/
+________________________________________
+🧪 6. Marking & Categorization
+Use pytest.ini for standard tags:
+##ini
+[pytest]
+markers =
+    ui: UI tests (Selenium-based)
+    api: API tests (Socket or REST)
+    smoke: Critical smoke tests
+    regression: Full regression suite
+In code:
+##python
+@pytest.mark.api
+@pytest.mark.smoke
+def test_place_order_success():
+    ...
+________________________________________
+🧰 7. Essential Project Files
+File	Purpose
+requirements.txt	List of dependencies (pinned versions)
+.gitignore	Exclude logs, venv, drivers, cache from Git
+pytest.ini	Global Pytest configuration
+README.md	Project overview and usage instructions
+.env / config.yaml	Environment-specific variables
+________________________________________
+🔐 8. Security Standards
+•	Secrets (tokens, passwords) must not be hardcoded.
+•	Use .env and python-dotenv or config.yaml for encrypted secrets.
+•	Encrypt sensitive socket payloads using AES/GCM or equivalent.
+________________________________________
+🔄 9. Git Standards
+Area	Standard
+Branching	main, dev, feature/<name>, hotfix/
+Commit message	feat:, fix:, test:, docs: prefixes
+Repo structure	Root folder to match my_automation_project layout
+
+
+Setup/Usage Guide – Framework
+🚀 1. Framework Overview
+This is a Python-based automation framework designed for UI (Selenium) and API (Socket-based communication) testing. It uses Pytest for test execution and pytest-html for HTML report generation.
+🧰 2. Prerequisites
+Before getting started, ensure that you have the following installed:
+•	Python 3.x+
+•	PyCharm (or another Python IDE)
+•	Git for version control (if using a repository)
+•	Google Chrome or other browsers (for Selenium)
+•	ChromeDriver (or corresponding driver for your browser)
+________________________________________
+🧑‍💻 3. Setting Up the Project
+3.1 Clone the Repository
+If you have a GitHub repository set up, you can clone it by running:
+##bash
+git clone https://github.com/yourusername/your-repo-name.git
+cd your-repo-name
+3.2 Install Dependencies
+Create and activate a virtual environment (optional but recommended):
+##bash
+python -m venv venv
+source venv/bin/activate   # For Linux/macOS
+venv\Scripts\activate      # For Windows
+Then install the required dependencies from requirements.txt:
+##bash
+pip install -r requirements.txt
+3.3 Configure WebDriver
+Ensure the appropriate WebDriver (e.g., chromedriver for Chrome) is downloaded and available in the drivers/ folder or your system’s PATH.
+If using Chrome, download the latest version of ChromeDriver here:
+ChromeDriver
+________________________________________
+🧪 4. Running Tests
+4.1 From PyCharm
+1.	Set up Pytest in PyCharm:
+o	Open the project in PyCharm.
+o	Go to File > Settings > Tools > Python Integrated Tools.
+o	In the Testing section, set Default Test Runner to Pytest.
+2.	Running Tests:
+o	Right-click on any test file or folder (e.g., tests/) and click Run 'pytest'.
+o	Alternatively, run tests from the terminal:
+##bash
+pytest  # To run all tests
+pytest tests/test_ui_login.py  # To run specific tests
+4.2 Running Tests from the Command Line
+You can run tests from the command line with different tags (e.g., for UI tests or Socket tests):
+##bash
+# Run all tests
+pytest
+
+# Run only UI tests
+pytest -m ui
+
+# Run only Socket API tests
+pytest -m socket
+
+# Run tests and generate HTML report
+pytest --html=reports/test_report.html --self-contained-html
+________________________________________
+🧑‍💻 5. Folder Structure Explanation
+Folder Name	Description
+tests/	Contains all your test cases (UI and API)
+pages/	Page Object Model for Selenium tests (e.g., login_page.py)
+socket_api/	Contains API client logic (e.g., order_client.py) and encryption utilities
+utils/	Common utilities like logging, data loading, etc.
+config/	Configuration files (e.g., config.yaml, .env)
+drivers/	WebDriver binaries (e.g., chromedriver)
+reports/	Test reports and logs generated during test runs
+.gitignore	To exclude unnecessary files from version control
+requirements.txt	List of project dependencies
+pytest.ini	Configuration for pytest (e.g., tags, test settings)
+run_tests.py	Optional script to run tests with specific configurations
+________________________________________
+🧰 6. Test Naming and Structure
+6.1 Test File Naming
+•	All test files should begin with test_.
+•	Example: test_ui_login.py, test_socket_order_api.py
+6.2 Test Method Naming
+•	Test methods should describe the action being tested.
+•	Example: test_valid_login(), test_place_order_success()
+6.3 Test Assertions
+•	Assertions should be clear and minimal.
+•	Example:
+##python
+assert page.is_logged_in()
+assert response["status"] == "SUCCESS"
+________________________________________
+🧑‍💻 7. Configuration and Secrets Management
+7.1 Environment Variables
+•	Use .env or config.yaml to store sensitive information (e.g., API keys, usernames, passwords).
+•	Install the python-dotenv package to load environment variables:
+##bash
+pip install python-dotenv
+7.2 Example .env
+##env
+API_URL=https://api.example.com
+USER_ID=admin
+PASSWORD=admin123
+In your code, you can load these values:
+##python
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+api_url = os.getenv("API_URL")
+user_id = os.getenv("USER_ID")
+password = os.getenv("PASSWORD")
+________________________________________
+🧑‍💻 8. Git Integration and Workflow
+8.1 Cloning and Initializing Git
+To set up Git for version control:
+##bash
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/yourusername/your-repo-name.git
+git push -u origin main
+8.2 Branching and Workflow
+•	Main branch: Stable and production-ready code.
+•	Development branch: Active development work.
+•	Feature branches: For new features or bug fixes.
+Example:
+##bash
+git checkout -b feature/add-ui-tests
+________________________________________
+🧑‍💻 9. CI/CD Integration
+You can integrate this project with GitHub Actions, Jenkins, or GitLab CI for continuous integration. Here's an example GitHub Actions configuration.
+.github/workflows/pytest.yml
+##yaml
+name: Run Pytest
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+    - name: Run tests
+      run: |
+        pytest --html=reports/test_report.html --self-contained-html
+This will automatically run tests every time changes are pushed to the repository.
+________________________________________
+📊 10. Test Reports
+After running the tests, an HTML report will be generated under the reports/ directory:
+•	HTML report: reports/test_report.html
+•	Screenshots: Captured on test failure in reports/screenshots/
+•	Logs: Stored as .log files in reports/logs/
+
